@@ -1,0 +1,74 @@
+package model;
+
+import java.io.Serializable;
+import javax.persistence.*;
+import java.sql.Timestamp;
+
+
+/**
+ * The persistent class for the token database table.
+ * 
+ */
+@Entity
+@NamedQuery(name="Token.findAll", query="SELECT t FROM Token t")
+public class Token implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	private int id;
+
+	private String authToken;
+
+	private Timestamp expiresOn;
+
+	private Timestamp issuedOn;
+
+	//bi-directional many-to-one association to User
+	@ManyToOne
+	@JoinColumn(name="userId")
+	private User user;
+
+	public Token() {
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getAuthToken() {
+		return this.authToken;
+	}
+
+	public void setAuthToken(String authToken) {
+		this.authToken = authToken;
+	}
+
+	public Timestamp getExpiresOn() {
+		return this.expiresOn;
+	}
+
+	public void setExpiresOn(Timestamp expiresOn) {
+		this.expiresOn = expiresOn;
+	}
+
+	public Timestamp getIssuedOn() {
+		return this.issuedOn;
+	}
+
+	public void setIssuedOn(Timestamp issuedOn) {
+		this.issuedOn = issuedOn;
+	}
+
+	public User getUser() {
+		return this.user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+}

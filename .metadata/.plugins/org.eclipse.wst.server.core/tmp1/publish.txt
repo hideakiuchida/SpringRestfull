@@ -1,0 +1,4 @@
+#Tomcat publish data
+#Tue May 24 15:09:46 COT 2016
+org.eclipse.jst.jee.server\:WsRestfullService.ECommerce.Licoreria=C\:\\sts-bundle\\pivotal-tc-server-developer-3.1.3.SR1\\base-instance\\wtpwebapps\\WsRestfullService.ECommerce.Licoreria
+org.eclipse.jst.jee.server\:/binary\:C\:\\Users\\DESARROLLO6\\.m2\\repository\\org\\springframework\\spring-web\\4.0.6.RELEASE\\spring-web-4.0.6.RELEASE.jar=C\:\\sts-bundle\\pivotal-tc-server-developer-3.1.3.SR1\\base-instance\\wtpwebapps\\WsRestfullService.ECommerce.Licoreria\\WEB-INF\\lib\\spring-web-4.0.6.RELEASE.jar

@@ -1,0 +1,10 @@
+package com.valmar.ecommerce.security.dao;
+
+import com.valmar.licoreria.security.model.User;
+
+public interface UserDao {
+	public int validateUser(String username, String password);	
+	public User getUserById(int userId);
+	public User findByUsername(String username);
+	
+}

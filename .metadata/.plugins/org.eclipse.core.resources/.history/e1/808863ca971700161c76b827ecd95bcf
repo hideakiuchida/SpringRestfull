@@ -1,0 +1,53 @@
+package com.valmar.licoreria.dao;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
+
+import com.valmar.licoreria.model.Employee;
+
+@Repository("employeeDao")
+public class EmployeeDaoImpl implements EmployeeDao {
+ 
+	@PersistenceContext
+    private EntityManager entityManager;
+	
+    public Employee findById(int id) {
+         Employee employee=null;         
+         try{
+             employee = (Employee) entityManager.find(Employee.class, id);
+             
+         }catch(Exception e){
+             e.printStackTrace();
+         }                
+         return employee;
+    }
+ 
+    public void saveEmployee(Employee employee) {
+    	entityManager.persist(employee);
+    }
+ 
+    public void deleteEmployeeById(int id) {
+    	 Employee emp = (Employee)entityManager.find(Employee.class, id);
+         entityManager.remove(emp);
+         entityManager.getTransaction().commit();
+    }
+ 
+    @SuppressWarnings("unchecked")
+    public List<Employee> findAllEmployees() {
+        Criteria criteria = createEntityCriteria();
+        return (List<Employee>) criteria.list();
+    }
+ 
+    public Employee findEmployeeBySsn(String ssn) {
+        Criteria criteria = createEntityCriteria();
+        criteria.add(Restrictions.eq("ssn", ssn));
+        return (Employee) criteria.uniqueResult();
+    }
+}

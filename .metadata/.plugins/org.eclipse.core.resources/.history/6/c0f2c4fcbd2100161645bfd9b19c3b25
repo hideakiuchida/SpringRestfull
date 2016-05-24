@@ -1,0 +1,5 @@
+package com.valmar.licoreria.aspect;
+
+public @interface Loggable {
+
+}

@@ -1,0 +1,140 @@
+package model;
+
+import java.io.Serializable;
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
+
+
+/**
+ * The persistent class for the user database table.
+ * 
+ */
+@Entity
+@NamedQuery(name="User.findAll", query="SELECT u FROM User u")
+public class User implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	private int id;
+
+	private int enabled;
+
+	private String firstname;
+
+	private String lastname;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date lastpasswordresetdate;
+
+	private String password;
+
+	private String username;
+
+	//bi-directional many-to-one association to Token
+	@OneToMany(mappedBy="user")
+	private List<Token> tokens;
+
+	//bi-directional many-to-many association to Authority
+	@ManyToMany
+	@JoinTable(
+		name="user_authority"
+		, joinColumns={
+			@JoinColumn(name="USER_ID")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="AUTHORITY_ID")
+			}
+		)
+	private List<Authority> authorities;
+
+	public User() {
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getEnabled() {
+		return this.enabled;
+	}
+
+	public void setEnabled(int enabled) {
+		this.enabled = enabled;
+	}
+
+	public String getFirstname() {
+		return this.firstname;
+	}
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public String getLastname() {
+		return this.lastname;
+	}
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+
+	public Date getLastpasswordresetdate() {
+		return this.lastpasswordresetdate;
+	}
+
+	public void setLastpasswordresetdate(Date lastpasswordresetdate) {
+		this.lastpasswordresetdate = lastpasswordresetdate;
+	}
+
+	public String getPassword() {
+		return this.password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getUsername() {
+		return this.username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public List<Token> getTokens() {
+		return this.tokens;
+	}
+
+	public void setTokens(List<Token> tokens) {
+		this.tokens = tokens;
+	}
+
+	public Token addToken(Token token) {
+		getTokens().add(token);
+		token.setUser(this);
+
+		return token;
+	}
+
+	public Token removeToken(Token token) {
+		getTokens().remove(token);
+		token.setUser(null);
+
+		return token;
+	}
+
+	public List<Authority> getAuthorities() {
+		return this.authorities;
+	}
+
+	public void setAuthorities(List<Authority> authorities) {
+		this.authorities = authorities;
+	}
+
+}

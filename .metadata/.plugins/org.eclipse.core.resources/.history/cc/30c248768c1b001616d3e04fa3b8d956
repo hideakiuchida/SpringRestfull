@@ -1,0 +1,60 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+
+	<!--  <http auto-config="true" use-expressions="true">
+		<intercept-url pattern="/admin**" access="hasRole('ROLE_USER')" />
+	    <intercept-url pattern="/employee/" access="hasRole('ROLE_USER')" /> 
+	    <intercept-url pattern="/employee/list" access="hasRole('ROLE_ADMIN')" /> 
+		
+		<http-basic />-->
+		<!-- enable csrf protection -->
+	<!--   <csrf />
+	</http> -->
+
+	<!--  <authentication-manager>
+	  <authentication-provider>
+
+	    <jdbc-user-service data-source-ref="dataSource"
+		  users-by-username-query=
+		    "select username,password, enabled from users where username=?"
+		  authorities-by-username-query=
+		    "select username, role from user_roles where username =?  " />
+	  </authentication-provider>
+	</authentication-manager> -->
+	
+	
+	<!-- (1) In this line, we activate @PreFilter, @PreAuthorize, @PostFilter, @PostAuthorize annotations 
+	on any spring beans in the context. -->
+	<security:global-method-security pre-post-annotations="enabled" />  
+    <!-- We define the login and signup endpoints to skip security; even “anonymous” should be able to do these two operations. -->
+    <security:http pattern="/api/login" security="none"/>   
+    <security:http pattern="/api/signup" security="none"/>
+
+	<!-- Next, we define the filter chain applied to all requests while adding two important configs: Entry point reference and setting 
+	the session creation to stateless (we do not want the session created for security purposes as we are using tokens for each request). -->
+    <security:http pattern="/api/**" entry-point-ref="restAuthenticationEntryPoint" create-session="stateless" disable-url-rewriting="false">
+    	<!-- We do not need csrf protection because our tokens are immune to it. --> 
+        <security:csrf disabled="true"/>  
+        <!-- Next, we plug in our special authentication filter within the Spring’s predefined filter chain, just before the form login filter -->
+        <security:custom-filter before="FORM_LOGIN_FILTER" ref="jwtAuthenticationFilter"/>  
+    </security:http>
+    
+    
+    <bean id="jwtAuthenticationFilter" class="com.valmar.licoreria.security.JwtAuthenticationFilter"> 
+        <property name="authenticationManager" ref="authenticationManager" />
+        <property name="authenticationSuccessHandler" ref="jwtAuthenticationSuccessHandler" />  
+    </bean>
+
+	<!-- This bean is the declaration of our authentification filter; since it is extending Spring’s AbstractAuthenticationProcessingFilter, 
+	we need to declare it in XML to wire its properties (auto wire does not work here). We will explain later what the filter does. -->
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider ref="jwtAuthenticationProvider" />  
+    </security:authentication-manager>
+
+</beans>

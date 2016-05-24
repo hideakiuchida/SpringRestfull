@@ -1,0 +1,9 @@
+package com.valmar.licoreria.security.dao;
+
+import com.valmar.licoreria.security.model.User;
+
+public interface TokenDao {
+	public String generateToken(User user);
+	public boolean validateToken(String tokenId);
+	public String getUsernameFromToken(String token);
+}

@@ -1,0 +1,50 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+
+	<!--  <http auto-config="true" use-expressions="true">
+		<intercept-url pattern="/admin**" access="hasRole('ROLE_USER')" />
+	    <intercept-url pattern="/employee/" access="hasRole('ROLE_USER')" /> 
+	    <intercept-url pattern="/employee/list" access="hasRole('ROLE_ADMIN')" /> 
+		
+		<http-basic />-->
+		<!-- enable csrf protection -->
+	<!--   <csrf />
+	</http> -->
+
+	<!--  <authentication-manager>
+	  <authentication-provider>
+
+	    <jdbc-user-service data-source-ref="dataSource"
+		  users-by-username-query=
+		    "select username,password, enabled from users where username=?"
+		  authorities-by-username-query=
+		    "select username, role from user_roles where username =?  " />
+	  </authentication-provider>
+	</authentication-manager> -->
+	
+	<security:global-method-security pre-post-annotations="enabled" />  
+    
+    <security:http pattern="/api/login" security="none"/>   
+    <security:http pattern="/api/signup" security="none"/>
+
+    <security:http pattern="/api/**" entry-point-ref="restAuthenticationEntryPoint" create-session="stateless" disable-url-rewriting="false"> 
+        <security:csrf/>  
+        <security:custom-filter before="FORM_LOGIN_FILTER" ref="jwtAuthenticationFilter"/>  
+    </security:http>
+    
+    <bean id="jwtAuthenticationFilter" class="com.valmar.licoreria.security.JwtAuthenticationFilter"> 
+        <property name="authenticationManager" ref="authenticationManager" />
+        <property name="authenticationSuccessHandler" ref="jwtAuthenticationSuccessHandler" />  
+    </bean>
+
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider ref="jwtAuthenticationProvider" />  
+    </security:authentication-manager>
+
+</beans>

@@ -1,0 +1,42 @@
+package com.valmar.licoreria.ecommerce.aspect;
+
+import java.util.Arrays;
+
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+
+@Aspect
+public class MainAspect {
+
+  /* @Before("execution(* com.valmar.licoreria.model.*.get*())")
+    public void getAllAdvice(){
+        System.out.println("PRUEBA:  Service method getter called");
+    }
+    
+    
+    @Before("allMethodsPointcut()")
+    public void allServiceMethodsAdvice(){
+        System.out.println("PRUEBA:  Antes de ejecutar los metodos de los contraladores");
+    }
+     
+    //Pointcut to execute on all the methods of classes in a package
+    @Pointcut("within(com.valmar.licoreria.controller.*)")
+    public void allMethodsPointcut(){}
+    
+    
+    @Before("execution(public void com.valmar.licoreria.controller.AuthenticationRestController.createAuthenticationToken())")
+    public void loggingAdvice(JoinPoint joinPoint){
+        System.out.println("PRUEBA:  Before running loggingAdvice on method="+joinPoint.toString());
+         
+        System.out.println("PRUEBA:  Agruments Passed=" + Arrays.toString(joinPoint.getArgs()));
+ 
+    }
+     
+    //Advice arguments, will be applied to bean methods with single Int argument
+    @Before("args(authorization)")
+    public void logStringArguments(String authorization){
+        System.out.println("PRUEBA:  String argument passed="+authorization);
+    }*/
+}
